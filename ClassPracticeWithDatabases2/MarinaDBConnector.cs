@@ -16,15 +16,24 @@ namespace ClassPracticeWithDatabases2
         public MarinaDBConnector(string dbConnectionString)
         {
             //open connection set it to dbSqlConnection
-            dbSqlConnection = new SqlConnection(dbConnectionString);
-            dbSqlConnection.Open();
+            try
+            {
+                dbSqlConnection = new SqlConnection(dbConnectionString);
+                dbSqlConnection.Open();
+            }
+            catch (SqlException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         ~MarinaDBConnector()
         {
-            //close connection
-            dbSqlConnection.Close();
-            
+            //dbSqlConnection.Close();            
         }
         
         /// <summary>
@@ -83,8 +92,12 @@ namespace ClassPracticeWithDatabases2
         /// <returns>Number of rows affected in the Marina table</returns>
         public int Insert(string id, string name, string address, string city, string state, string zip)
         {
+            int numRowsAffected;
+            String sqlQueryString = "INSERT INTO marina VALUES ('" + id + "', '" + name + "', '" + address + "', '" + city + "', '" + state + "', '" + zip + "');";
+            SqlCommand command = new SqlCommand(sqlQueryString, dbSqlConnection);
 
-            //stub
+            numRowsAffected = command.ExecuteNonQuery();
+
             return 0;
         }
 
@@ -100,8 +113,13 @@ namespace ClassPracticeWithDatabases2
         /// <returns>Number of rows affected in the Marina table</returns>
         public int Update(string id, string name, string address, string city, string state, string zip)
         {
+            int numRowsAffected;
 
-            //stub
+            String sqlQueryString = "UPDATE marina SET marina_num='" + id + "', name='" + name + "', address='" + address + "', city='" + city + "', state='" + state + "', zip='" + zip + "' WHERE marina_num = '" + id + "';";
+            SqlCommand command = new SqlCommand(sqlQueryString, dbSqlConnection);
+
+            numRowsAffected = command.ExecuteNonQuery();
+            
             return 0;
         }
 
@@ -118,8 +136,13 @@ namespace ClassPracticeWithDatabases2
         /// <returns>Number of rows affected in the Marina table</returns>
         public int Update(string oldId, string newId, string name, string address, string city, string state, string zip)
         {
+            int numRowsAffected;
 
-            //stub
+            String sqlQueryString = "UPDATE marina SET marina_num='" + newId + "', name='" + name + "', address='" + address + "', city='" + city + "', state='" + state + "', zip='" + zip + "' WHERE marina_num = '" + oldId + "';";
+            SqlCommand command = new SqlCommand(sqlQueryString, dbSqlConnection);
+
+            numRowsAffected = command.ExecuteNonQuery();
+            
             return 0;
         }
 
@@ -131,8 +154,13 @@ namespace ClassPracticeWithDatabases2
         /// <returns>Number of rows updated in the Marina table</returns>
         public int Update(string id, MarinaDBRow row)
         {
+            int numRowsAffected;
 
-            //stub
+            String sqlQueryString = "UPDATE marina SET marina_num='" + row.id + "', name='" + row.name + "', address='" + row.address + "', city='" + row.city + "', state='" + row.state + "', zip='" + row.zip + "' WHERE marina_num='" + id + "';";
+            SqlCommand command = new SqlCommand(sqlQueryString, dbSqlConnection);
+
+            numRowsAffected = command.ExecuteNonQuery();
+            
             return 0;
         }
         /// <summary>
@@ -142,7 +170,13 @@ namespace ClassPracticeWithDatabases2
         /// <returns>Number of rows affected in the Marina table</returns>
         public int Delete(string id)
         {
-            //stub
+            int numRowsAffected;
+
+            String sqlQueryString = "DELETE FROM marina WHERE marina_num='" + id + "';";
+            SqlCommand command = new SqlCommand(sqlQueryString, dbSqlConnection);
+
+            numRowsAffected = command.ExecuteNonQuery();
+
             return 0;
         }
     }

@@ -13,12 +13,23 @@ namespace ClassPracticeWithDatabases2
 {
     public partial class Form1 : Form
     {
-        private MarinaDBConnector connector = new MarinaDBConnector("Data Source=(local);Initial Catalog=ALEXAMARA;User Id=sa;Password=abc123;Integrated Security=false");
+        
+        MarinaDBConnector marina;
 
 
         public Form1()
         {
             InitializeComponent();
+
+            try
+            {
+                marina = new MarinaDBConnector("Data Source=(local);Initial Catalog=ALEXAMARA;User Id=sa;Password=abc123;Integrated Security=false");
+            }
+            catch (SqlException e)
+            {
+                MessageBox.Show("Database has bad connection - closing program");
+                this.Close();
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -40,7 +51,7 @@ namespace ClassPracticeWithDatabases2
             string recordNum = txtGo.Text;
             MarinaDBRow row;
 
-            row = connector.Select(recordNum);
+            row = marina.Select(recordNum);
 
             txtNum.Text = row.id;
             txtName.Text = row.name;
@@ -107,7 +118,7 @@ namespace ClassPracticeWithDatabases2
             row.state = txtState.Text;
             row.zip = txtZip.Text;
 
-            int numRowsInserted = connector.Insert(row);
+            int numRowsInserted = marina.Insert(row);
 
             MessageBox.Show(numRowsInserted + "row(s) inserted!");
 
@@ -125,6 +136,12 @@ namespace ClassPracticeWithDatabases2
             txtGo.Text = "";
             txtUpdate.Text = "";
             txtDelete.Text = "";
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Form2 form = new Form2();
+            form.Show();
         }
     }
 }
